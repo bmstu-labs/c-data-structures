@@ -1,3 +1,9 @@
+# UDE Files
+.vscode
+
+# Build files
+build
+
 # Prerequisites
 *.d
 
