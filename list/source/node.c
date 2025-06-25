@@ -25,7 +25,7 @@ int node_free(struct node *restrict n) {
     while (current) {
         struct node *next = current->next;
 
-        free(current->data);
+        // free(current->data);
         free(current);
 
         current = next;
