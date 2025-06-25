@@ -8,7 +8,7 @@ int node_init(struct node *restrict n, const void *restrict data) {
     int status = OK;
 
     if (n == NULL) {
-        status = NULLPTR;
+        status = NULLPTR_GIVEN;
         return status;
     }
 
