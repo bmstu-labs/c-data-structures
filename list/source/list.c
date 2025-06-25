@@ -1,6 +1,8 @@
 #include "list.h"
 #include "errors.h"
 
+#include <stdlib.h>
+
 int list_init(struct list *l) {
     int status = OK;
 
@@ -15,12 +17,21 @@ int list_init(struct list *l) {
     return status;
 }
 
-int list_push_back(struct list *restrict l, struct node *restrict n) {
+int list_push_back(struct list *restrict l, void *restrict data) {
     int status = OK;
-    if (l == NULL || n == NULL) {
+    if (l == NULL) {
         status = NULLPTR_GIVEN;
         return status;
     }
+
+    // Allocate and init node
+    struct node *n = (struct node *) malloc(sizeof(struct node));
+    if (n == NULL) {
+        status = ALLOCATION_ERROR;
+        return status;
+    }
+
+    node_init(n, data);
     
     if (l->head == NULL) {
         l->head = n;
@@ -46,12 +57,21 @@ int list_push_back(struct list *restrict l, struct node *restrict n) {
     return status;
 }
 
-int list_push_front(struct list *restrict l, struct node *restrict n) {
+int list_push_front(struct list *restrict l, void *restrict data) {
     int status = OK;
-    if (l == NULL || n == NULL) {
+    if (l == NULL) {
         status = NULLPTR_GIVEN;
         return status;
     }
+
+    // Allocate and init node
+    struct node *n = (struct node *) malloc(sizeof(struct node));
+    if (n == NULL) {
+        status = ALLOCATION_ERROR;
+        return status;
+    }
+
+    node_init(n, data);
 
     // If the list has no elements
     if (l->head == NULL) {
@@ -69,7 +89,7 @@ int list_push_front(struct list *restrict l, struct node *restrict n) {
     return status;
 }
 
-struct node *list_get(struct list *l, size_t index) {
+void *list_get(struct list *l, size_t index) {
     struct node *result = NULL;
     if (l == NULL) {
         return result;
@@ -86,14 +106,14 @@ struct node *list_get(struct list *l, size_t index) {
         counter++;
     }
 
-    return result;
+    return result->data;
 }
 
-struct node *list_head(struct list *l) {
-    return (l == NULL) ? NULL : l->head;
+void *list_head(struct list *l) {
+    return (l == NULL) ? NULL : l->head->data;
 }
 
-struct node *list_tail(struct list *l) {
+void *list_tail(struct list *l) {
     struct node *result = NULL;
     if (l == NULL || list_empty(l) == TRUE) {
         return result;
@@ -106,7 +126,7 @@ struct node *list_tail(struct list *l) {
 
     result = current;
 
-    return result;
+    return result->data;
 }
 
 int list_empty(const struct list *l) {
