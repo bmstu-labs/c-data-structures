@@ -1,2 +1,0 @@
-/usr/bin/ar qc libcqueue.a CMakeFiles/cqueue.dir/source/node.c.o CMakeFiles/cqueue.dir/source/queue.c.o
-/usr/bin/ranlib libcqueue.a
