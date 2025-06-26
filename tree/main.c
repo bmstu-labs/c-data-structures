@@ -14,30 +14,39 @@ int int_cmp(const void *a, const void *b) {
     }
 }
 
-
 int main() {
     tree t;
     tree_init(&t);
 
     int a = 5;
     int b = 4;
+    int c = 6;
+    int d = 2;
+    int e = 7;
 
-    printf("size of tree is %lu\n", tree_size(&t));
+    tree_insert(&t, (void *)&a, int_cmp);
+    tree_insert(&t, (void *)&b, int_cmp);
+    tree_insert(&t, (void *)&c, int_cmp);
+    tree_insert(&t, (void *)&d, int_cmp);
+    tree_insert(&t, (void *)&e, int_cmp);
 
-    tree_insert(&t, (void *) &a, int_cmp);
-    printf("size of tree is %lu\n", tree_size(&t));
+    printf("Size of tree is %lu\n", tree_size(&t));
 
-    a = 6;
-    
-    tree_insert(&t, (void *) &a, int_cmp);
-    printf("size of tree is %lu\n", tree_size(&t));
+    const node *found_node_BFS = tree_BFS(&t, &c, int_cmp);
+    if (found_node_BFS != NULL) {
+        printf("Found element with value %d using BFS\n", *(int *)found_node_BFS->data);
+    } else {
+        printf("Element not found using BFS\n");
+    }
 
-    a = 2;
-
-    tree_insert(&t, (void *) &a, int_cmp);
-    printf("size of tree is %lu\n", tree_size(&t));
+    const node *found_node_DFS = tree_DFS(&t, &d, int_cmp);
+    if (found_node_DFS != NULL) {
+        printf("Found element with value %d using DFS\n", *(int *)found_node_DFS->data);
+    } else {
+        printf("Element not found using DFS\n");
+    }
 
     tree_free(&t);
-    
+
     return 0;
 }

@@ -77,9 +77,56 @@ size_t tree_size(const tree *t) {
 }
 
 const node *tree_BFS(const tree *restrict t, const void *restrict data, int (*cmp)(const void *, const void *)) {
+    if (t == NULL || t->root == NULL) {
+        return NULL;
+    }
+
+    queue q;
+    queue_init(&q);
+    queue_push(&q, t->root);
+
+    while (!queue_is_empty(&q)) {
+        node *current = queue_pop(&q);
+        if (cmp(current->data, data) == 0) {
+            queue_free(&q);
+            return current;
+        }
+
+        if (current->left) {
+            queue_push(&q, current->left);
+        }
+        if (current->right) {
+            queue_push(&q, current->right);
+        }
+    }
+
+    queue_free(&q);
     return NULL;
 }
 
+static const node *dfs_recursive(const node *current, const void *data, int (*cmp)(const void *, const void *));
+
 const node *tree_DFS(const tree *restrict t, const void *restrict data, int (*cmp)(const void *, const void *)) {
-    return NULL;
+    if (t == NULL || t->root == NULL) {
+        return NULL;
+    }
+
+    return dfs_recursive(t->root, data, cmp);
+}
+
+const node *dfs_recursive(const node *current, const void *data, int (*cmp)(const void *, const void *)) {
+    if (current == NULL) {
+        return NULL;
+    }
+
+    if (cmp(current->data, data) == 0) {
+        return current;
+    }
+
+    const node *left_result = dfs_recursive(current->left, data, cmp);
+    if (left_result != NULL) {
+        return left_result;
+    }
+
+    return dfs_recursive(current->right, data, cmp);
 }
