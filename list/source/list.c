@@ -152,3 +152,22 @@ int list_free(struct list *l) {
 
     return status;
 }
+
+int list_free_deep(struct list *l, void (*free_func)(void *)) {
+    int status = OK;
+
+    node *current = l->head;
+    while (current) {
+        node *next = current->next;
+        if (free_func && current->data) {
+            free_func(current->data);
+        }
+
+        free(current);
+        current = next;
+    }
+
+    free(l);
+
+    return status;
+}

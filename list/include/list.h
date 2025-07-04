@@ -24,3 +24,5 @@ void *list_tail(struct list *l);
 int list_empty(const struct list *l);
 
 int list_free(struct list *l);
+
+int list_free_deep(struct list *l, void (* free_func)(void *));
